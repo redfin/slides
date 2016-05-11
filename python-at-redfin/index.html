@@ -1,0 +1,309 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/redfin.css" id="league">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-transition="fade">
+					<h1>Python at Redfin</h1>
+
+					<img
+						alt="Puget Sound Python Group Logo"
+						src="img/psp.png"
+						style="height: 100px; padding: 25 px;" />
+					<img
+						alt="Redfin Logo"
+						src="img/redfin.png"
+						style="height: 100px; padding: 25 px;" />
+					<img
+						alt="Python Logo"
+						src="img/python.png"
+						style="height: 100px; padding: 25 px;"/>
+				</section>
+				<section data-markdown data-separator-notes="^Aside:" data-transition="fade">
+					### Doug Wade
+					Platforms team
+
+					[doug.wade@redfin.com](mailto:doug.wade@redfin.com)
+
+					Aside:
+						I'm mostly a javascriptista, but Python was the first language I liked
+						I've been at Redfin almost a year
+						I work mostly on front end build, especially performance
+				</section>
+				<section data-transition="fade">
+					<img
+						style="height: 75px; border: none; padding: 25 px;"
+						alt="Python Logo"
+						src="img/python.png" />
+					<h1>
+							Python
+					</h1>
+					<h3>Redfin Official Scripting Language</h3>
+
+					<ul>
+						<li>nagios alerts</li>
+						<li>endpoint testing</li>
+						<li>data imports</li>
+						<li>walk score deployments</li>
+					</ul>
+					<aside class="notes">
+						These are smaller uses; just emphasizing Python's ubiquity
+						Our nagios alerts are a subset used to monitor Jenkins
+						Our test team uses python to run performance tests against the site
+						The data team uses python for listings imports, photos
+						walk score uses boto to identify aws hosts and multiprocessing to manage pools
+					</aside>
+				</section>
+				<section data-markdown data-separator-notes="^Aside:" data-transition="fade">
+					# Agenda
+
+					- Build: Bazel
+					- Deploy: Fabric
+					- Test: REF
+
+					Aside:
+						We're currently working on creating a continuous deployment pipeline
+						Many parts of the are written in Python
+						Our Python is rapidly growing
+				</section>
+				<section data-transition="fade">
+					<img
+						style="height: 75px; border: none; padding: 25 px;"
+						alt="Bazel Logo"
+						src="img/bazel.png" />
+					<h1>
+							Bazel
+					</h1>
+					<h3>Fast, reproducible build system</h3>
+
+					<ul>
+						<li>Written in <a href="http://bazel.io/docs/skylark/">a subset of Python</a></li>
+						<li>Builds api server</li>
+						<li>Builds distibution tarballs</li>
+						<li>Adding building node modules</li>
+					</ul>
+					<aside class="notes">
+						Written at Google, uses hermeticism to guarantee reproducability, and a distributed artifact cache for performance
+						This is a big part of our move to continuous deployment, to get builds under 6 minutes
+						We've struggled with our module builds because of npm violations of bazel assumptions
+					</aside>
+				</section>
+				<section data-transition="fade">
+					<img
+						style="height: 75px; border: none; padding: 25 px;"
+						alt="Bazel Logo"
+						src="img/bazel.png" />
+					<h1>
+							Bazel
+					</h1>
+					<pre><code>
+    def _external_npm_module(ctx):
+    return struct(
+        internal = False,
+        transitive_internal_deps = [],
+        transitive_external_deps = [ctx.attr.raw_target] + ctx.attr.runtime_deps
+    )
+    external_npm_module = rule(
+        implementation = _external_npm_module,
+        attrs = {
+            "raw_target": attr.label(allow_files = True),
+            "runtime_deps": attr.label_list(allow_files = True)
+        },
+    )
+					</code></pre>
+					<aside class="notes">
+						This is an example rule -- the implementation is the function; the rule is the build script function invocation
+						Note that skylark is a subset to enforce hermeticism
+					</aside>
+				</section>
+				<section data-transition="fade">
+					<img
+						style="height: 75px; border: none; padding: 25 px;"
+						alt="Fabric Logo"
+						src="img/fabric.png" />
+					<h1>
+							Fabric
+					</h1>
+					<h3>streamlines deploy and sysadmin tasks</h3>
+
+				<p>Manages: servers - databases - solr - ci fleet - deployments</p>
+				<aside class="notes">
+					Used almost exclusively for deployments
+					Is managed by a Google doc that is translated to xml and then updates the google doc with timing data
+					Manage everything except a small subset of ops boxes that aren't deployed to
+				</aside>
+				</section>
+				<section data-transition="fade">
+					<img
+						style="height: 75px; border: none; padding: 25 px;"
+						alt="Fabric Logo"
+						src="img/fabric.png" />
+					<h1>
+							Fabric
+					</h1>
+				<pre><code class="python">
+    from fabric.api import *
+    import utils.configuration
+    from utils.deploylogger import log_run
+    import time
+    import os
+
+    '''Start apache on each server.'''
+    def do_work(config, silent_mode=False, args=None):
+        retstring, retval = log_run(config, 'apachectl start', args)
+        if retval:
+            return (retstring, retval)
+        return ('Success', 0)
+				</code></pre>
+				<aside class="notes">
+					This is an example rule -- all methods are named do_work and operate on each host
+					We define groups of hosts that can be operated on, or single boxes
+					It helped us coordinate deploys when developers managed deploy steps individually
+				</aside>
+				</section>
+				<section data-transition="fade">
+					<img
+						style="height: 75px; border: none; padding: 25 px;"
+						alt="Redfin Logo"
+						src="img/redfin.png" />
+					<h1>
+							dirpy
+					</h1>
+					<h3>Server-side image cropping + resizing</h3>
+
+					<ul>
+						<li>Resizes arbitrary images from MLS to fit standard sizes</li>
+						<li>Handles 156 images a second on reference VM</li>
+						<li>built with <a href="https://pillow.readthedocs.io">Pillow</a></li>
+					</ul>
+					<aside class="notes">
+						The reference vm was 4 cores with 4GB memory.
+						Scales to 2000 imgs/sec; we run at 200 imgs/sec in prod
+						Planning on open-sourcing it
+					</aside>
+				</section>
+				<section data-transition="fade">
+					<img
+						style="height: 75px; border: none; padding: 25 px;"
+						alt="Redfin Logo"
+						src="img/redfin.png" />
+					<h1>
+							ETL Testing
+					</h1>
+					<h3>Black box verification of ETL pipelines</h3>
+
+					<ul>
+						<li>defines test cases</li>
+						<li>manages creation and deletion of source data</li>
+						<li>manages execution and failure detection of the pipeline</li>
+						<li>is extensible to new sources/destinations</li>
+						<li>built with <a href="http://pytest.org/latest/">py.test</a> and <a href="http://springpython.webfactional.com/">Spring Python</a></li>
+					</ul>
+					<aside class="notes">
+						We use it for the analytics cd pipeline to make sure changes are good
+						Uses an existing EC2 instance to grab data from an S3 bucket and put it in Redshift
+						Uses text files to test loads into our PostgreSql instances
+						Does regression testing for the data team
+					</aside>
+				</section>
+				<section data-transition="fade">
+					<img
+						style="height: 75px; border: none; padding: 25 px;"
+						alt="Redfin Logo"
+						src="img/redfin.png" />
+					<h1>
+							ETL Testing
+					</h1>
+					<pre><code>
+<object id="trivial test" class="etltest.ETLTestCase">
+    <constructor-arg name="description">
+        <value>trivial assertion</value>
+    </constructor-arg>
+    <constructor-arg name="assertions">
+        <list>
+            <object id='trivial' class="etltest.PythonAssert">
+                <!--a trivial PythonAssert to show how it works-->
+                <constructor-arg name="code" value="2+2 == 4"/>
+            </object>
+        </list>
+    </constructor-arg>
+</object>
+					</code></pre>
+					<aside class="notes">
+						This is a very simple test case that only asserts that 2+2 = 4
+						In real tests, you provide source, dest, and a pipeline
+					</aside>
+				</section>
+				<section data-transition="fade">
+					<img
+						style="height: 75px; border: none; padding: 25 px;"
+						alt="Redfin Logo"
+						src="img/redfin.png" />
+					<h1>
+							REF
+					</h1>
+					<h3>Redfin Experiments Framework</h3>
+
+					<ul>
+						<li>performs A/B testing</li>
+						<li>integrates with our feature toggle, Bouncer</li>
+						<li>used to test major features before release</li>
+						<li>counts events from Redshift table and generates static site</li>
+					</ul>
+					<aside class="notes">
+						Something extra -- try to cut this
+						Probably not the best example, but handles millions of events daily
+					</aside>
+				</section>
+				<section data-transition="fade">
+					<h1>We're Hiring!</h1>
+					<h3><a href="http://www.redfin.com/about/jobs/hq">Jobs site</a></h3>
+					<h5>Contact us: <a href="mailto:techrecruiting@redfin.com">techrecruiting@redfin.com</a></h5>
+					<aside class="notes">
+						Mostly, our experience in Python has been: it shouldn't be this easy, but it is
+						Dan / jlo's story about starting a thread / process pool
+					</aside>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>

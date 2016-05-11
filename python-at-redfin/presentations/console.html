@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>reveal.js - The HTML Presentation Framework</title>
+
+  <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+  <meta name="author" content="Hakim El Hattab">
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+  <link rel="stylesheet" href="css/reveal.css">
+  <link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+  <!-- Code syntax highlighting -->
+  <link rel="stylesheet" href="lib/css/zenburn.css">
+
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName('head')[0].appendChild(link);
+  </script>
+
+  <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+</head>
+
+<body>
+
+  <div class="reveal">
+
+    <!-- Any section element inside of this container is displayed as a slide -->
+    <div class="slides">
+      <section>
+        <h1>Using Chrome's console</h1>
+        <h3>It's not just console.log anymore</h3>
+        <p>
+          <small>Created by <a href="http://github.com/prekolna">Doug Wade</a> / <a href="http://twitter.com/AShedOfTools">@AShedOfTools</a></small>
+        </p>
+      </section>
+
+      <section>
+        <h1>console.log</h1>
+        <pre><code class="javascript">
+console.log("Karate, the 'Dane Cook' of martial arts?");
+> Karate, the 'Dane Cook' of martial arts?
+          </code></pre>
+        <img style="height: 400px; width: 400px;" class="fragment" src="http://ic.pics.livejournal.com/denniso/75395922/27778/27778_original.jpg" />
+      </section>
+
+      <section>
+        <section>
+          <h1>log levels</h1>
+          <div>Info: <pre style="display: inline;"><code style="display: inline;" class="javascript">console.debug()  </code></pre></div>
+          <div>Info: <pre style="display: inline;"><code style="display: inline;" class="javascript">console.info()</code></pre></div>
+          <div>Info: <pre style="display: inline;"><code style="display: inline;" class="javascript">console.log()</code></pre></div>
+          <div>Warn: <pre style="display: inline;"><code style="display: inline;" class="javascript">console.warn() </code></pre></div>
+          <div>Error: <pre style="display: inline;"><code style="display: inline;" class="javascript">console.error()  </code></pre></div>
+
+          <p>
+            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.debug()</code></pre> and
+            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.info()</code></pre> are just aliases for
+            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.log()</code></pre>
+          </p>
+
+          <pre><code>
+  console.debug("Lana");
+  console.warn("Lana!");
+  console.error("LANA!!!");
+  console.info("Danger zone.");
+           </code></pre>
+        </section>
+
+        <section>
+          <img src="http://localhost:3000/log-levels.png" />
+        </section>
+      </section>
+
+      <section>
+        <h1>Format specifiers</h1>
+        <p>All log levels support string interpolation using format specifiers that correspond to the remaining parameters to the log function.</p>
+        <pre><code>
+var interjection = "Jeezy-petes!";
+console.log('Uses interjection %s', interjection);
+        </code></pre>
+      </section>
+
+      <section>
+        <h1>Format specifiers</h1>
+        <table>
+          <thead>
+            <tr>
+              <th>Specifier</th>
+              <th style="text-align: left">Output</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>%s</td>
+              <td style="text-align: left">String</td>
+            </tr>
+            <tr>
+              <td>%i or %d</td>
+              <td style="text-align: left">Integer</td>
+            </tr>
+            <tr>
+              <td>%f</td>
+              <td style="text-align: left">Floating point value</td>
+            </tr>
+            <tr>
+              <td>%o</td>
+              <td style="text-align: left">DOM element</td>
+            </tr>
+            <tr>
+              <td>%O</td>
+              <td style="text-align: left">JavaScript object</td>
+            </tr>
+            <tr>
+              <td>%c</td>
+              <td style="text-align: left">Applies CSS style rules as specified by a second parameter</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <section>
+          <h1>Logging groups</h1>
+          <p>
+            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.group(label)</code></pre> starts a logging group, and
+            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.groupEnd()</code></pre> ends it.
+            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.groupCollapsed(label)</code></pre> begins a logging group that is collapsed by default.
+          </p>
+          <pre><code>
+  var characters = [
+    { name: 'Cyril', age: 45, aliases: ['Odie McCracken'] },
+    { name: 'Cheryl', age: 32, aliases: ['Carol', 'Cherlene'] },
+    { name: 'Lana', age: 33, aliases: ['Shirley Temper'] },
+    { name: 'Archer', age: 37, aliases: ['Duchess', 'Randy'] }
+  ];
+  characters.forEach((character) => {
+    console.group('Logging character ' + character.name);
+    console.groupCollapsed('Aliases');
+    character.aliases.forEach(alias => console.log('alias %s', alias));
+    console.groupEnd();
+    console.log('age %i', character.age);
+    console.groupEnd();
+  });
+          </code></pre>
+        </section>
+
+        <section>
+          <img src="http://localhost:3000/groups.png" />
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h1>Logging objects</h1>
+          <p>
+            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.dir(object)</code></pre>
+             outputs an object and its keys.
+            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.table(array)</code></pre>
+             outputs a tabular representation of an array of objects.
+          </p>
+          <pre><code>
+  var characters = [
+    { name: 'Krieger', age: 45, aliases: [] },
+    { name: 'Cheryl', age: 32, aliases: ['Carol', 'Cherlene'] },
+    { name: 'Lana', age: 33, aliases: ['Shirley Temper'] },
+    { name: 'Archer', age: 37, aliases: ['Duchess', 'Randy'] }
+  ]
+  console.dir(characters[3]);
+  console.table(characters);
+          </code></pre>
+          <aside class="notes">
+            <p>Here's code with dates to show dates
+              <pre><code class="javascript">
+  console.dir({ name: 'Archer', age: 37, aliases: ['Duchess', 'Randy'], created: new Date() });
+            </code></pre>
+              <pre><code class="javascript">
+  var characters = [
+    { name: 'Krieger', age: 45, aliases: [], created: new Date() },
+    { name: 'Cheryl', age: 32, aliases: ['Carol', 'Cherlene'], created: new Date() },
+    { name: 'Lana', age: 33, aliases: ['Shirley Temper'], created: new Date() },
+    { name: 'Archer', age: 37, aliases: ['Duchess', 'Randy'], created: new Date() }
+  ]
+  console.table(characters);
+            </code></pre>
+          </aside>
+        </section>
+        <section>
+          <img src="http://localhost:3000/dir.png" />
+        </section>
+        <section>
+          <img src="http://localhost:3000/tables.png" />
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h1>Stack Traces</h1>
+          <p>Log a stack trace using <pre style="display: inline;"><code style="display: inline;" class="javascript">console.trace(message)</code></pre><p>
+          <pre><code class="javascript">
+  (function one() {
+    (function two() {
+      (function three() {
+        console.trace("I have a stack trace");
+      })();
+    })();
+  })();
+          </code></pre>
+        </section>
+        <section>
+          <img src="http://localhost:3000/stack-traces.png" />
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h1>Assertions</h1>
+          <p>Perform ad-hoc tests with <pre style="display: inline;"><code style="display: inline;" class="javascript">console.assert(assertion, message)</code></pre></p>
+          <pre><code class="javascript">
+  function KriegerClone (number) {
+    this.number = number;
+    this.greetKrieger = function(timeOfDay) {
+      // should be less than; error intentional so assertion fails.
+      return 'Guten ' + (timeOfDay.getHours() > 17 ? 'Tag' : 'Abend')
+       + ' Klon-Bruder! Ich bin ' + this.number + '.';
+    }
+  }
+  var clone = new KriegerClone(42);
+  var testDate = new Date(2015, 8, 24, 16, 0, 0);
+  var expected = 'Guten Tag Klon-Bruder! Ich bin 42.';
+  console.assert(expected === clone.greetKrieger(testDate),
+    "Krieger clone should greet correctly");
+          </code></pre>
+        </section>
+        <section>
+          <img src="http://localhost:3000/assertions.png" />
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h1>Counting</h1>
+          <p>Use <pre style="display: inline;"><code style="display: inline;" class="javascript">console.count(message)</code></pre>
+             to count the number of times a message is logged.
+           </p>
+           <pre><code class="javascript">
+  var clones = new Array(100);
+  for (var i = 0; i < 100; i++) {
+    console.count("cloning Krieger.");
+    clones[i] = new KriegerClone(i);
+  }
+           </code></pre>
+        </section>
+        <section>
+          <img src="http://localhost:3000/counting.png" />
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h1>Timing</h1>
+          <p>Wrap a code block in
+            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.time(label)</code></pre> and
+            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.timeEnd(label)</code></pre> with the same label to time something. Use
+            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.timeStamp(label)</code></pre> to mark the timeline with an event.
+          </p>
+          <pre><code class="javascript">
+  function KriegerClone (number) { this.number = number; }
+
+  var label = "Clone Krieger";
+  console.time(label);
+  var clones = new Array(1000000);
+  for (var i = 0; i < 1000000; i++) {
+    if (i === 500000) { console.timeStamp("Halfway there!") }
+    clones[i] = new KriegerClone(i);
+  }
+  console.timeEnd(label);
+          </code></pre>
+          <aside class="notes">
+            Strangely, time / timeEnd is unlike group / groupEnd and profile / profileEnd, neither of which require label to be passed to the end method.
+          </aside>
+        </section>
+        <section>
+          <img src="http://localhost:3000/timeline.png" />
+        </section>
+      </section>
+
+      <section>
+<section>
+  <h1>Profiling</h1>
+  <p>Wrap a code block in
+    <pre style="display: inline;"><code style="display: inline;" class="javascript">console.profile(label)</code></pre> and
+    <pre style="display: inline;"><code style="display: inline;" class="javascript">console.profileEnd()</code></pre> to profile a block of code using the browser profiler.
+  </p>
+  <pre><code class="javascript">
+  function KriegerClone (number) { this.number = number; }
+
+  var label = "Clone Krieger";
+  console.profile(label);
+  var clones = new Array(1000000);
+  for (var i = 0; i < 1000000; i++) {
+    clones[i] = new KriegerClone(i);
+  }
+  console.profileEnd(label);
+          </code></pre>
+</section>
+<section>
+  <img src="http://localhost:3000/profiling.png" />
+</section>
+</section>
+
+      <section style="text-align: left;">
+        <h1>THE END</h1>
+        <p>
+          Made using <a href="https://github.com/hakimel/reveal.js">reveal.js</a>
+        </p>
+        <p>
+          Get the slides:
+          <pre>
+              <code>
+git clone https://doug.wade@stash.redfin.com/scm/~doug.wade/presentations.git
+              </code>
+            </pre>
+        </p>
+				<p>
+					Read the docs:
+					<ul style="list-style: none;">
+						<li><a href="https://developers.google.com/web/tools/javascript/console/console-reference?hl=en">Console API</a></li>
+						<li><a href="https://developers.google.com/web/tools/javascript/console/console-write">Using the console</a></li>
+					</ul>
+				</p>
+      </section>
+
+    </div>
+
+  </div>
+
+  <script src="lib/js/head.min.js"></script>
+  <script src="js/reveal.js"></script>
+
+  <script>
+    // Full list of configuration options available at:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+      controls: true,
+      progress: true,
+      history: true,
+      center: true,
+
+      transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+      // Optional reveal.js plugins
+      dependencies: [{
+        src: 'lib/js/classList.js',
+        condition: function() {
+          return !document.body.classList;
+        }
+      }, {
+        src: 'plugin/markdown/marked.js',
+        condition: function() {
+          return !!document.querySelector('[data-markdown]');
+        }
+      }, {
+        src: 'plugin/markdown/markdown.js',
+        condition: function() {
+          return !!document.querySelector('[data-markdown]');
+        }
+      }, {
+        src: 'plugin/highlight/highlight.js',
+        async: true,
+        condition: function() {
+          return !!document.querySelector('pre code');
+        },
+        callback: function() {
+          hljs.initHighlightingOnLoad();
+        }
+      }, {
+        src: 'plugin/zoom-js/zoom.js',
+        async: true
+      }, {
+        src: 'plugin/notes/notes.js',
+        async: true
+      }]
+    });
+  </script>
+
+</body>
+
+</html>
