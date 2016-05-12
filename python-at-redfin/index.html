@@ -101,11 +101,12 @@
 
 					<ul>
 						<li>Resizes arbitrary images from MLS to fit standard sizes</li>
-						<li>Handles 156 images a second on reference VM</li>
+						<li>Handles 200 images a second in prod</li>
+						<li>Resizes a single image in 6 - 8 ms</li>
 						<li>built with <a href="https://pillow.readthedocs.io">Pillow</a></li>
 					</ul>
 					<aside class="notes">
-						The reference vm was 4 cores with 4GB memory.
+						Resized 156 images a second on a reference vm with 4 cores and 4GB memory.
 						Scales to 2000 imgs/sec; we run at 200 imgs/sec in prod
 						Planning on open-sourcing it
 					</aside>
