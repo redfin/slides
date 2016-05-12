@@ -78,14 +78,37 @@
 				<section data-markdown data-separator-notes="^Aside:" data-transition="fade">
 					# Agenda
 
+					- Build images: dirpy
 					- Build: Bazel
 					- Deploy: Fabric
+					- Test: ETL Testing
 					- Test: REF
 
 					Aside:
 						We're currently working on creating a continuous deployment pipeline
 						Many parts of the are written in Python
 						Our Python is rapidly growing
+				</section>
+				<section data-transition="fade">
+					<img
+						style="height: 75px; border: none; padding: 25 px;"
+						alt="Redfin Logo"
+						src="img/redfin.png" />
+					<h1>
+							dirpy
+					</h1>
+					<h3>Server-side image cropping + resizing</h3>
+
+					<ul>
+						<li>Resizes arbitrary images from MLS to fit standard sizes</li>
+						<li>Handles 156 images a second on reference VM</li>
+						<li>built with <a href="https://pillow.readthedocs.io">Pillow</a></li>
+					</ul>
+					<aside class="notes">
+						The reference vm was 4 cores with 4GB memory.
+						Scales to 2000 imgs/sec; we run at 200 imgs/sec in prod
+						Planning on open-sourcing it
+					</aside>
 				</section>
 				<section data-transition="fade">
 					<img
@@ -188,27 +211,6 @@
 						alt="Redfin Logo"
 						src="img/redfin.png" />
 					<h1>
-							dirpy
-					</h1>
-					<h3>Server-side image cropping + resizing</h3>
-
-					<ul>
-						<li>Resizes arbitrary images from MLS to fit standard sizes</li>
-						<li>Handles 156 images a second on reference VM</li>
-						<li>built with <a href="https://pillow.readthedocs.io">Pillow</a></li>
-					</ul>
-					<aside class="notes">
-						The reference vm was 4 cores with 4GB memory.
-						Scales to 2000 imgs/sec; we run at 200 imgs/sec in prod
-						Planning on open-sourcing it
-					</aside>
-				</section>
-				<section data-transition="fade">
-					<img
-						style="height: 75px; border: none; padding: 25 px;"
-						alt="Redfin Logo"
-						src="img/redfin.png" />
-					<h1>
 							ETL Testing
 					</h1>
 					<h3>Black box verification of ETL pipelines</h3>
@@ -284,8 +286,9 @@
 				<section>
 					<h1>Questions?</h1>
 					<blockquote>
-						This couldn't possibly work, could it?  It can't be that easy, can it?  But it works! - Dan Fabulich
+						This couldn't possibly work, could it?  It can't be that easy, can it?  But it works!
 					</blockquote>
+					<p> - Dan Fabulich</p>
 					<aside class="notes">
 						Mostly, our experience in Python has been: it shouldn't be this easy, but it is
 						Dan / jlo's story about starting a thread / process pool
