@@ -1,0 +1,154 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/redfin.css" id="league">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-transition="fade">
+					<h1>ReactJS at Redfin</h1>
+
+					<img
+						alt="React Logo"
+						src="img/react-logo.png"
+						style="height: 100px; padding: 25 px;"/>
+					<img
+						alt="Redfin Logo"
+						src="img/redfin.png"
+						style="height: 100px; padding: 25 px;" />
+					
+				</section>
+				<section data-markdown data-separator-notes="^Aside:" data-transition="fade">
+					### RCL
+					Search team
+
+					[rcl@redfin.com](mailto:rcl@redfin.com)
+				</section>
+				<section data-markdown data-separator-notes="^Aside:" data-transition="fade">
+					# Agenda
+
+					- Motivations
+					- React-server
+					- Company-wide adoption
+
+					Aside:
+						We're currently working on creating a continuous deployment pipeline
+						Many parts of the are written in Python
+						Our Python is rapidly growing
+				</section>
+				<section data-markdown data-transition="fade">
+					# Motivations
+
+					
+					- Search engine optimization
+					- Dojo
+				</section>
+				<section data-transition="fade">
+					<h1>
+							SEO
+					</h1>
+					<ul>
+						<li>PhantomJS</li>
+					</ul>
+				</section>
+				<section data-transition="fade">
+					<h1>
+							Dojo
+					</h1>
+					<ul>
+						<li>Stub</li>
+					</ul>
+				</section>
+				<section data-transition="fade">
+					<h1>
+							React-Server Overview
+					</h1>
+					Some descriptions
+				</section>
+				<section data-transition="fade">
+					<h1>
+							Technologies
+					</h1>
+					<ul>
+						<li>React</li>
+						<li>Reflux</li>
+						<li>Express</li>
+						<li>Routr</li>
+						<li>Clustr</li>
+					</ul>
+				</section>
+				<section data-transition="fade">
+					<h1>
+							Features
+					</h1>
+					<ul>
+						<li>Performance optimizations</li>
+						<li>Data caching</li>
+						<li>Client transition</li>
+						<li>Universal JS</li>
+						<li>SEO</li>
+					</ul>
+				</section>
+				<section data-transition="fade">
+					<h1>
+							Company-wide Adoption
+					</h1>
+					<h3>
+						All our highest trafficked pages are now using react-server
+					</h3>
+					Show off some numbers here
+				</section>
+				<section data-transition="fade">
+					<h1>
+							For more info
+					</h1>
+					<h3>
+						See our github
+					</h3>
+				</section>
+				<section data-transition="fade">
+					<h1>
+							Questions?
+					</h1>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
