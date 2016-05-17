@@ -13,3 +13,7 @@ To add a new presentation using [reveal.js](http://lab.hakim.se/reveal-js/)
 - Add a link to your new presentation to [index.html](/index.html)
 
 Remember, its just a static site, so you can use any web technology you can think of, reveal is just one option.
+
+If you commonly forget that the main development branch is called `gh-pages` instead of `master`, you can create an alias
+
+    git symbolic-ref refs/heads/master refs/heads/gh-pages
